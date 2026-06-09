@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ফিফা বিশ্বকাপ ২০২৬ — ফিক্সচার</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b3c;
+    --green-light: #2d9e5f;
+    --green-dark: #0f3d22;
+    --gold: #f5c518;
+    --gold-light: #ffd84d;
+    --bg: #0a1a10;
+    --card-bg: #0f2518;
+    --card-border: #1e4a2e;
+    --text: #e8f5ee;
+    --text-muted: #7ab890;
+    --white: #ffffff;
+    --red: #e74c3c;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Tiro Bangla', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(26,107,60,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(245,197,24,0.05) 0%, transparent 60%);
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--green-dark) 0%, #0d2b18 50%, #061510 100%);
+    border-bottom: 2px solid var(--gold);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+  }
+  .header-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .trophy-icon {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 0 8px rgba(245,197,24,0.6));
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}
+  }
+  .header-text h1 {
+    font-size: 1.5rem; color: var(--gold);
+    line-height: 1.2; font-weight: 700;
+  }
+  .header-text p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  .header-badge {
+    margin-left: auto;
+    background: var(--gold); color: var(--green-dark);
+    font-size: 0.72rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+  }
+
+  .filters-section {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+    padding: 12px 16px;
+  }
+  .filters-inner { max-width: 1100px; margin: 0 auto; }
+  .filters-label {
+    font-size: 0.75rem; color: var(--text-muted);
+    letter-spacing: 0.5px; margin-bottom: 8px;
+  }
+  .filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    padding: 7px 12px; border-radius: 8px;
+    font-family: 'Tiro Bangla', serif; font-size: 0.88rem;
+    cursor: pointer; outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    flex: 1; min-width: 160px;
+  }
+  select:focus { border-color: var(--gold); background: rgba(245,197,24,0.05); }
+  select option { background: #0f2518; }
+  .btn-reset {
+    background: transparent;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+    padding: 7px 16px; border-radius: 8px;
+    font-family: 'Tiro Bangla', serif; font-size: 0.88rem;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+  .stats-bar {
+    max-width: 1100px; margin: 12px auto 0;
+    padding: 0 16px;
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+  }
+  .stat-item { font-size: 0.82rem; color: var(--text-muted); }
+  .stat-item span { color: var(--gold); font-weight: 700; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 14px 16px; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    padding: 7px 16px; border-radius: 20px;
+    font-family: 'Tiro Bangla', serif; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--green); border-color: var(--green-light); color: var(--white);
+  }
+
+  .day-group { margin-bottom: 22px; }
+  .day-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px; padding: 8px 14px;
+    background: linear-gradient(90deg, rgba(26,107,60,0.3) 0%, transparent 100%);
+    border-left: 3px solid var(--green-light);
+    border-radius: 0 8px 8px 0;
+  }
+  .day-name { font-size: 1rem; color: var(--gold); font-weight: 700; }
+  .day-date { font-size: 0.78rem; color: var(--text-muted); }
+  .day-count {
+    margin-left: auto;
+    background: rgba(26,107,60,0.4);
+    color: var(--green-light);
+    font-size: 0.72rem; padding: 2px 8px; border-radius: 10px;
+  }
+
+  .matches-grid { display: grid; gap: 10px; }
+  .match-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 8px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .match-card::before {
+    content:''; position:absolute; top:0;left:0;right:0; height:2px;
+    background: linear-gradient(90deg, var(--green-light), var(--gold), var(--green-light));
+    opacity:0; transition:opacity 0.2s;
+  }
+  .match-card:hover { transform:translateY(-2px); border-color:var(--green-light); box-shadow:var(--shadow); }
+  .match-card:hover::before { opacity:1; }
+
+  .team { display:flex; align-items:center; gap:10px; }
+  .team.right { flex-direction:row-reverse; text-align:right; }
+
+  .team-flag {
+    width: 36px; height: 26px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+  }
+
+  .team-name { font-size: 0.92rem; font-weight: 700; color: var(--white); line-height:1.2; }
+  .team-name-en { font-size:0.66rem; color:var(--text-muted); font-weight:400; margin-top:1px; font-family: sans-serif; }
+
+  .match-center {
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    min-width: 95px;
+  }
+  .vs-badge {
+    background: rgba(245,197,24,0.12);
+    border: 1px solid rgba(245,197,24,0.3);
+    color: var(--gold);
+    font-size: 0.9rem; font-weight: 700;
+    padding: 3px 10px; border-radius:6px;
+    font-family: sans-serif; letter-spacing:1px;
+  }
+  .match-time { font-size:0.78rem; color:var(--gold-light); font-weight:700; white-space:nowrap; }
+  .match-group {
+    font-size:0.68rem;
+    background:rgba(26,107,60,0.4); color:var(--green-light);
+    padding:2px 7px; border-radius:4px; white-space:nowrap;
+  }
+
+  .match-meta {
+    grid-column: 1 / -1;
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    padding-top:8px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    margin-top:2px;
+  }
+  .meta-badge { display:flex; align-items:center; gap:4px; font-size:0.72rem; color:var(--text-muted); }
+
+  .no-results { text-align:center; padding:60px 20px; color:var(--text-muted); }
+  .no-results .icon { font-size:3rem; margin-bottom:12px; }
+
+  /* GROUPS TAB */
+  .groups-container {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px;
+  }
+  .group-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px; overflow:hidden; }
+  .group-title {
+    background:linear-gradient(135deg,var(--green-dark),#0d2b18);
+    padding:8px 14px; font-size:0.95rem; font-weight:700;
+    color:var(--gold); border-bottom:1px solid var(--card-border);
+  }
+  .group-team-row {
+    display:flex; align-items:center; gap:8px; padding:7px 14px;
+    font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.04);
+    transition:background 0.15s;
+  }
+  .group-team-row:last-child { border-bottom:none; }
+  .group-team-row:hover { background:rgba(255,255,255,0.03); }
+  .group-flag { font-size:1.3rem; line-height:1; }
+
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px}
+  .hidden { display:none !important; }
+
+  @media(max-width:600px){
+    .header-text h1{font-size:1.2rem}
+    .match-card{grid-template-columns:1fr; gap:6px; padding:10px 12px;}
+    .team{flex-direction:column; gap:4px; text-align:center;}
+    .team.right{flex-direction:column;}
+    .match-center{flex-direction:row; justify-content:center; min-width:unset; flex-wrap:wrap; gap:6px;}
+    .team-name{text-align:center}
+    .match-meta{justify-content:center}
+    .groups-container{grid-template-columns:1fr 1fr}
+    select{min-width:130px}
+  }
+  @media(max-width:380px){
+    .groups-container{grid-template-columns:1fr}
+  }
+  /* FOOTER */
+  footer {
+    margin-top: 40px;
+    border-top: 1px solid var(--card-border);
+    background: linear-gradient(135deg, var(--green-dark), #061510);
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-source {
+    font-size: 0.78rem; color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
+  }
+  .footer-source span { color: var(--gold); font-weight: 600; }
+  .footer-credit {
+    font-size: 0.82rem; color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .footer-credit a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 1px dashed rgba(245,197,24,0.4);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .footer-credit a:hover {
+    color: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+  .footer-ball { font-size: 1.3rem; animation: spin 4s linear infinite; display: inline-block; }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="trophy-icon">🏆</div>
+    <div class="header-text">
+      <h1>ফিফা বিশ্বকাপ ২০২৬</h1>
+      <p>সম্পূর্ণ ফিক্সচার · বাংলাদেশ সময়</p>
+    </div>
+    <div class="header-badge">🇧🇩 BST</div>
+  </div>
+</header>
+
+<div class="filters-section">
+  <div class="filters-inner">
+    <div class="filters-label">🔍 ফিল্টার করুন</div>
+    <div class="filter-row">
+      <select id="filterGroup" onchange="applyFilters()">
+        <option value="">সব গ্রুপ / পর্ব</option>
+        <option value="A">গ্রুপ এ</option>
+        <option value="B">গ্রুপ বি</option>
+        <option value="C">গ্রুপ সি</option>
+        <option value="D">গ্রুপ ডি</option>
+        <option value="E">গ্রুপ ই</option>
+        <option value="F">গ্রুপ এফ</option>
+        <option value="G">গ্রুপ জি</option>
+        <option value="H">গ্রুপ এইচ</option>
+        <option value="I">গ্রুপ আই</option>
+        <option value="J">গ্রুপ জে</option>
+        <option value="K">গ্রুপ কে</option>
+        <option value="L">গ্রুপ এল</option>
+        <option value="R32">শেষ ৩২</option>
+        <option value="R16">শেষ ১৬</option>
+        <option value="QF">কোয়ার্টার ফাইনাল</option>
+        <option value="SF">সেমি ফাইনাল</option>
+        <option value="3PL">তৃতীয় স্থান</option>
+        <option value="FIN">ফাইনাল</option>
+      </select>
+      <select id="filterTeam" onchange="applyFilters()">
+        <option value="">সব দল</option>
+      </select>
+      <button class="btn-reset" onclick="resetFilters()">↺ রিসেট</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">মোট ম্যাচ: <span id="totalCount">0</span></div>
+  <div class="stat-item">দেখাচ্ছে: <span id="shownCount">0</span></div>
+</div>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('fixtures',this)">📅 ফিক্সচার</button>
+    <button class="tab-btn" onclick="showTab('groups',this)">👥 গ্রুপ</button>
+  </div>
+
+  <div id="tab-fixtures">
+    <div id="matchesContainer"></div>
+    <div id="noResults" class="no-results hidden">
+      <div class="icon">⚽</div>
+      <p>কোনো ম্যাচ পাওয়া যায়নি।</p>
+    </div>
+  </div>
+
+  <div id="tab-groups" class="hidden">
+    <div class="groups-container" id="groupsContainer"></div>
+  </div>
+</main>
+
+<script>
+// ─── FLAG IMAGES via flagcdn.com (reliable) ───
+function flagImg(code) {
+  if (!code) return '<span style="font-size:1.4rem">🏳️</span>';
+  return `<img src="https://flagcdn.com/w40/${code}.png" width="36" height="24" style="border-radius:3px;object-fit:cover;display:block;" alt="${code}" onerror="this.replaceWith(document.createTextNode('🏳️'))">`;
+}
+
+const TEAMS = {
+  "মেক্সিকো":        { code:"mx", en:"Mexico" },
+  "দক্ষিণ আফ্রিকা":  { code:"za", en:"South Africa" },
+  "দক্ষিণ কোরিয়া":  { code:"kr", en:"South Korea" },
+  "চেক প্রজাতন্ত্র": { code:"cz", en:"Czechia" },
+  "কানাডা":          { code:"ca", en:"Canada" },
+  "বসনিয়া":          { code:"ba", en:"Bosnia & Herz." },
+  "সুইজারল্যান্ড":   { code:"ch", en:"Switzerland" },
+  "কাতার":            { code:"qa", en:"Qatar" },
+  "ব্রাজিল":         { code:"br", en:"Brazil" },
+  "মরক্কো":          { code:"ma", en:"Morocco" },
+  "স্কটল্যান্ড":     { code:"gb-sct", en:"Scotland" },
+  "হাইতি":           { code:"ht", en:"Haiti" },
+  "যুক্তরাষ্ট্র":   { code:"us", en:"USA" },
+  "প্যারাগুয়ে":     { code:"py", en:"Paraguay" },
+  "অস্ট্রেলিয়া":    { code:"au", en:"Australia" },
+  "তুরস্ক":          { code:"tr", en:"Türkiye" },
+  "জার্মানি":        { code:"de", en:"Germany" },
+  "কুরাসাও":         { code:"cw", en:"Curaçao" },
+  "আইভরিকোস্ট":      { code:"ci", en:"Ivory Coast" },
+  "ইকুয়েডর":        { code:"ec", en:"Ecuador" },
+  "নেদারল্যান্ডস":  { code:"nl", en:"Netherlands" },
+  "জাপান":           { code:"jp", en:"Japan" },
+  "তিউনিসিয়া":      { code:"tn", en:"Tunisia" },
+  "সুইডেন":          { code:"se", en:"Sweden" },
+  "স্পেন":           { code:"es", en:"Spain" },
+  "কেপ ভার্দে":      { code:"cv", en:"Cape Verde" },
+  "বেলজিয়াম":       { code:"be", en:"Belgium" },
+  "মিশর":            { code:"eg", en:"Egypt" },
+  "সৌদি আরব":        { code:"sa", en:"Saudi Arabia" },
+  "উরুগুয়ে":        { code:"uy", en:"Uruguay" },
+  "ইরান":            { code:"ir", en:"Iran" },
+  "নিউজিল্যান্ড":   { code:"nz", en:"New Zealand" },
+  "ফ্রান্স":         { code:"fr", en:"France" },
+  "সেনেগাল":         { code:"sn", en:"Senegal" },
+  "নরওয়ে":          { code:"no", en:"Norway" },
+  "ইরাক":            { code:"iq", en:"Iraq" },
+  "আর্জেন্টিনা":    { code:"ar", en:"Argentina" },
+  "আলজেরিয়া":       { code:"dz", en:"Algeria" },
+  "অস্ট্রিয়া":      { code:"at", en:"Austria" },
+  "জর্ডান":          { code:"jo", en:"Jordan" },
+  "পর্তুগাল":       { code:"pt", en:"Portugal" },
+  "ডিআর কঙ্গো":     { code:"cd", en:"DR Congo" },
+  "উজবেকিস্তান":    { code:"uz", en:"Uzbekistan" },
+  "কলম্বিয়া":       { code:"co", en:"Colombia" },
+  "ইংল্যান্ড":       { code:"gb-eng", en:"England" },
+  "ক্রোয়েশিয়া":    { code:"hr", en:"Croatia" },
+  "ঘানা":            { code:"gh", en:"Ghana" },
+  "পানামা":          { code:"pa", en:"Panama" },
+};
+
+const GROUPS = {
+  "এ": ["মেক্সিকো","দক্ষিণ কোরিয়া","দক্ষিণ আফ্রিকা","চেক প্রজাতন্ত্র"],
+  "বি": ["কানাডা","সুইজারল্যান্ড","কাতার","বসনিয়া"],
+  "সি": ["ব্রাজিল","মরক্কো","স্কটল্যান্ড","হাইতি"],
+  "ডি": ["যুক্তরাষ্ট্র","অস্ট্রেলিয়া","প্যারাগুয়ে","তুরস্ক"],
+  "ই": ["জার্মানি","ইকুয়েডর","আইভরিকোস্ট","কুরাসাও"],
+  "এফ": ["নেদারল্যান্ডস","জাপান","তিউনিসিয়া","সুইডেন"],
+  "জি": ["বেলজিয়াম","ইরান","মিশর","নিউজিল্যান্ড"],
+  "এইচ": ["স্পেন","সৌদি আরব","কেপ ভার্দে","উরুগুয়ে"],
+  "আই": ["ফ্রান্স","সেনেগাল","নরওয়ে","ইরাক"],
+  "জে": ["আর্জেন্টিনা","আলজেরিয়া","অস্ট্রিয়া","জর্ডান"],
+  "কে": ["পর্তুগাল","কলম্বিয়া","উজবেকিস্তান","ডিআর কঙ্গো"],
+  "এল": ["ইংল্যান্ড","ক্রোয়েশিয়া","ঘানা","পানামা"],
+};
+
+const monthsBn = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+const daysBn  = ["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
+function fmtDate(s){
+  const d=new Date(s+"T00:00:00");
+  return `${daysBn[d.getDay()]}, ${d.getDate()} ${monthsBn[d.getMonth()]}`;
+}
+
+const VENUE_COUNTRY = {
+  "মেক্সিকো সিটি":      "🇲🇽 মেক্সিকো",
+  "গুয়াদালহারা":        "🇲🇽 মেক্সিকো",
+  "গুয়াদালাহারা":       "🇲🇽 মেক্সিকো",
+  "মন্তেরেই":           "🇲🇽 মেক্সিকো",
+  "টরন্টো":             "🇨🇦 কানাডা",
+  "ভ্যাঙ্কুভার":         "🇨🇦 কানাডা",
+  "লস অ্যাঞ্জেলস":      "🇺🇸 যুক্তরাষ্ট্র",
+  "সান ফ্রান্সিসকো":    "🇺🇸 যুক্তরাষ্ট্র",
+  "নিউজার্সি":          "🇺🇸 যুক্তরাষ্ট্র",
+  "বোস্টন":             "🇺🇸 যুক্তরাষ্ট্র",
+  "ভ্যাঙ্কুভার":         "🇨🇦 কানাডা",
+  "হিউস্টন":            "🇺🇸 যুক্তরাষ্ট্র",
+  "ডালাস":              "🇺🇸 যুক্তরাষ্ট্র",
+  "ফিলাডেলফিয়া":        "🇺🇸 যুক্তরাষ্ট্র",
+  "আটলান্টা":           "🇺🇸 যুক্তরাষ্ট্র",
+  "সিয়াটল":            "🇺🇸 যুক্তরাষ্ট্র",
+  "মায়ামি":             "🇺🇸 যুক্তরাষ্ট্র",
+  "কানসাস সিটি":        "🇺🇸 যুক্তরাষ্ট্র",
+  "কানসাস":             "🇺🇸 যুক্তরাষ্ট্র",
+};
+
+// g = filter key: A-L, R32, R16, QF, SF, 3PL, FIN
+const F=[
+// ── গ্রুপ পর্ব ──
+{id:1, date:"2026-06-11",t:"রাত ১টা",    g:"A",phase:"গ্রুপ পর্ব",  t1:"মেক্সিকো",       t2:"দক্ষিণ আফ্রিকা",  v:"মেক্সিকো সিটি"},
+{id:2, date:"2026-06-12",t:"সকাল ৮টা",   g:"A",phase:"গ্রুপ পর্ব",  t1:"দক্ষিণ কোরিয়া", t2:"চেক প্রজাতন্ত্র", v:"গুয়াদালহারা"},
+{id:3, date:"2026-06-12",t:"রাত ১টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"কানাডা",          t2:"বসনিয়া",          v:"টরন্টো"},
+{id:4, date:"2026-06-13",t:"সকাল ৭টা",   g:"D",phase:"গ্রুপ পর্ব",  t1:"যুক্তরাষ্ট্র",   t2:"প্যারাগুয়ে",      v:"লস অ্যাঞ্জেলস"},
+{id:5, date:"2026-06-13",t:"রাত ১টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"কাতার",           t2:"সুইজারল্যান্ড",    v:"সান ফ্রান্সিসকো"},
+{id:6, date:"2026-06-14",t:"ভোর ৪টা",    g:"C",phase:"গ্রুপ পর্ব",  t1:"ব্রাজিল",         t2:"মরক্কো",           v:"নিউজার্সি"},
+{id:7, date:"2026-06-14",t:"সকাল ৭টা",   g:"C",phase:"গ্রুপ পর্ব",  t1:"হাইতি",           t2:"স্কটল্যান্ড",      v:"বোস্টন"},
+{id:8, date:"2026-06-14",t:"সকাল ১০টা",  g:"D",phase:"গ্রুপ পর্ব",  t1:"অস্ট্রেলিয়া",    t2:"তুরস্ক",           v:"ভ্যাঙ্কুভার"},
+{id:9, date:"2026-06-14",t:"রাত ১১টা",   g:"E",phase:"গ্রুপ পর্ব",  t1:"জার্মানি",        t2:"কুরাসাও",          v:"হিউস্টন"},
+{id:10,date:"2026-06-14",t:"রাত ২টা",    g:"F",phase:"গ্রুপ পর্ব",  t1:"নেদারল্যান্ডস",  t2:"জাপান",            v:"ডালাস"},
+{id:11,date:"2026-06-15",t:"ভোর ৫টা",    g:"E",phase:"গ্রুপ পর্ব",  t1:"আইভরিকোস্ট",     t2:"ইকুয়েডর",         v:"ফিলাডেলফিয়া"},
+{id:12,date:"2026-06-15",t:"সকাল ৮টা",   g:"F",phase:"গ্রুপ পর্ব",  t1:"সুইডেন",          t2:"তিউনিসিয়া",       v:"মন্তেরেই"},
+{id:13,date:"2026-06-15",t:"রাত ১০টা",   g:"H",phase:"গ্রুপ পর্ব",  t1:"স্পেন",           t2:"কেপ ভার্দে",       v:"আটলান্টা"},
+{id:14,date:"2026-06-15",t:"রাত ১টা",    g:"G",phase:"গ্রুপ পর্ব",  t1:"বেলজিয়াম",       t2:"মিশর",             v:"সিয়াটল"},
+{id:15,date:"2026-06-16",t:"ভোর ৪টা",    g:"H",phase:"গ্রুপ পর্ব",  t1:"সৌদি আরব",        t2:"উরুগুয়ে",          v:"মায়ামি"},
+{id:16,date:"2026-06-16",t:"সকাল ৭টা",   g:"G",phase:"গ্রুপ পর্ব",  t1:"ইরান",            t2:"নিউজিল্যান্ড",     v:"লস অ্যাঞ্জেলস"},
+{id:17,date:"2026-06-16",t:"রাত ১টা",    g:"I",phase:"গ্রুপ পর্ব",  t1:"ফ্রান্স",         t2:"সেনেগাল",          v:"নিউজার্সি"},
+{id:18,date:"2026-06-17",t:"ভোর ৪টা",    g:"I",phase:"গ্রুপ পর্ব",  t1:"ইরাক",            t2:"নরওয়ে",            v:"বোস্টন"},
+{id:19,date:"2026-06-17",t:"সকাল ৭টা",   g:"J",phase:"গ্রুপ পর্ব",  t1:"আর্জেন্টিনা",    t2:"আলজেরিয়া",        v:"কানসাস সিটি"},
+{id:20,date:"2026-06-17",t:"সকাল ১০টা",  g:"J",phase:"গ্রুপ পর্ব",  t1:"অস্ট্রিয়া",      t2:"জর্ডান",           v:"সান ফ্রান্সিসকো"},
+{id:21,date:"2026-06-17",t:"রাত ১১টা",   g:"K",phase:"গ্রুপ পর্ব",  t1:"পর্তুগাল",       t2:"ডিআর কঙ্গো",       v:"হিউস্টন"},
+{id:22,date:"2026-06-17",t:"রাত ২টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"ইংল্যান্ড",       t2:"ক্রোয়েশিয়া",     v:"ডালাস"},
+{id:23,date:"2026-06-18",t:"ভোর ৫টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"ঘানা",            t2:"পানামা",            v:"টরন্টো"},
+{id:24,date:"2026-06-18",t:"সকাল ৮টা",   g:"K",phase:"গ্রুপ পর্ব",  t1:"উজবেকিস্তান",    t2:"কলম্বিয়া",        v:"মেক্সিকো সিটি"},
+{id:25,date:"2026-06-18",t:"রাত ১০টা",   g:"A",phase:"গ্রুপ পর্ব",  t1:"চেক প্রজাতন্ত্র",t2:"দক্ষিণ আফ্রিকা",  v:"আটলান্টা"},
+{id:26,date:"2026-06-18",t:"রাত ১টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"সুইজারল্যান্ড",  t2:"বসনিয়া",          v:"লস অ্যাঞ্জেলস"},
+{id:27,date:"2026-06-19",t:"ভোর ৪টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"কানাডা",          t2:"কাতার",            v:"ভ্যাঙ্কুভার"},
+{id:28,date:"2026-06-19",t:"সকাল ৭টা",   g:"A",phase:"গ্রুপ পর্ব",  t1:"মেক্সিকো",        t2:"দক্ষিণ কোরিয়া",  v:"গুয়াদালহারা"},
+{id:29,date:"2026-06-19",t:"রাত ১টা",    g:"D",phase:"গ্রুপ পর্ব",  t1:"যুক্তরাষ্ট্র",   t2:"অস্ট্রেলিয়া",    v:"সিয়াটল"},
+{id:30,date:"2026-06-20",t:"ভোর ৪টা",    g:"C",phase:"গ্রুপ পর্ব",  t1:"স্কটল্যান্ড",    t2:"মরক্কো",           v:"বোস্টন"},
+{id:31,date:"2026-06-20",t:"সকাল ৭টা",   g:"C",phase:"গ্রুপ পর্ব",  t1:"ব্রাজিল",         t2:"হাইতি",            v:"ফিলাডেলফিয়া"},
+{id:32,date:"2026-06-20",t:"সকাল ১০টা",  g:"D",phase:"গ্রুপ পর্ব",  t1:"তুরস্ক",          t2:"প্যারাগুয়ে",      v:"সান ফ্রান্সিসকো"},
+{id:33,date:"2026-06-20",t:"রাত ১১টা",   g:"F",phase:"গ্রুপ পর্ব",  t1:"নেদারল্যান্ডস",  t2:"সুইডেন",           v:"হিউস্টন"},
+{id:34,date:"2026-06-20",t:"রাত ২টা",    g:"E",phase:"গ্রুপ পর্ব",  t1:"জার্মানি",        t2:"আইভরিকোস্ট",      v:"টরন্টো"},
+{id:35,date:"2026-06-21",t:"ভোর ৬টা",    g:"E",phase:"গ্রুপ পর্ব",  t1:"ইকুয়েডর",        t2:"কুরাসাও",          v:"কানসাস সিটি"},
+{id:36,date:"2026-06-21",t:"সকাল ১০টা",  g:"F",phase:"গ্রুপ পর্ব",  t1:"তিউনিসিয়া",      t2:"জাপান",            v:"মন্তেরেই"},
+{id:37,date:"2026-06-21",t:"রাত ১০টা",   g:"H",phase:"গ্রুপ পর্ব",  t1:"স্পেন",           t2:"সৌদি আরব",         v:"আটলান্টা"},
+{id:38,date:"2026-06-21",t:"রাত ১টা",    g:"G",phase:"গ্রুপ পর্ব",  t1:"বেলজিয়াম",       t2:"ইরান",             v:"লস অ্যাঞ্জেলস"},
+{id:39,date:"2026-06-22",t:"ভোর ৪টা",    g:"H",phase:"গ্রুপ পর্ব",  t1:"উরুগুয়ে",        t2:"কেপ ভার্দে",       v:"মায়ামি"},
+{id:40,date:"2026-06-22",t:"সকাল ৭টা",   g:"G",phase:"গ্রুপ পর্ব",  t1:"নিউজিল্যান্ড",   t2:"মিশর",             v:"ভ্যাঙ্কুভার"},
+{id:41,date:"2026-06-22",t:"রাত ১১টা",   g:"J",phase:"গ্রুপ পর্ব",  t1:"আর্জেন্টিনা",    t2:"অস্ট্রিয়া",       v:"ডালাস"},
+{id:42,date:"2026-06-22",t:"রাত ৩টা",    g:"I",phase:"গ্রুপ পর্ব",  t1:"ফ্রান্স",         t2:"ইরাক",             v:"ফিলাডেলফিয়া"},
+{id:43,date:"2026-06-23",t:"সকাল ৬টা",   g:"I",phase:"গ্রুপ পর্ব",  t1:"নরওয়ে",          t2:"সেনেগাল",          v:"নিউজার্সি"},
+{id:44,date:"2026-06-23",t:"সকাল ৯টা",   g:"J",phase:"গ্রুপ পর্ব",  t1:"জর্ডান",          t2:"আলজেরিয়া",        v:"সান ফ্রান্সিসকো"},
+{id:45,date:"2026-06-23",t:"রাত ১১টা",   g:"K",phase:"গ্রুপ পর্ব",  t1:"পর্তুগাল",       t2:"উজবেকিস্তান",      v:"হিউস্টন"},
+{id:46,date:"2026-06-23",t:"রাত ২টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"ইংল্যান্ড",       t2:"ঘানা",             v:"বোস্টন"},
+{id:47,date:"2026-06-24",t:"ভোর ৫টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"পানামা",          t2:"ক্রোয়েশিয়া",     v:"টরন্টো"},
+{id:48,date:"2026-06-24",t:"সকাল ৮টা",   g:"K",phase:"গ্রুপ পর্ব",  t1:"কলম্বিয়া",       t2:"ডিআর কঙ্গো",       v:"গুয়াদালাহারা"},
+{id:49,date:"2026-06-24",t:"রাত ১টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"কানাডা",          t2:"সুইজারল্যান্ড",    v:"ভ্যাঙ্কুভার"},
+{id:50,date:"2026-06-24",t:"রাত ১টা",    g:"B",phase:"গ্রুপ পর্ব",  t1:"বসনিয়া",         t2:"কাতার",            v:"সিয়াটল"},
+{id:51,date:"2026-06-25",t:"ভোর ৪টা",    g:"C",phase:"গ্রুপ পর্ব",  t1:"স্কটল্যান্ড",    t2:"ব্রাজিল",          v:"মায়ামি"},
+{id:52,date:"2026-06-25",t:"ভোর ৪টা",    g:"C",phase:"গ্রুপ পর্ব",  t1:"মরক্কো",          t2:"হাইতি",            v:"আটলান্টা"},
+{id:53,date:"2026-06-25",t:"সকাল ৭টা",   g:"A",phase:"গ্রুপ পর্ব",  t1:"মেক্সিকো",        t2:"চেক প্রজাতন্ত্র", v:"মেক্সিকো সিটি"},
+{id:54,date:"2026-06-25",t:"সকাল ৭টা",   g:"A",phase:"গ্রুপ পর্ব",  t1:"দক্ষিণ কোরিয়া", t2:"দক্ষিণ আফ্রিকা",  v:"মন্তেরেই"},
+{id:55,date:"2026-06-25",t:"রাত ২টা",    g:"E",phase:"গ্রুপ পর্ব",  t1:"ইকুয়েডর",        t2:"জার্মানি",         v:"নিউজার্সি"},
+{id:56,date:"2026-06-25",t:"রাত ২টা",    g:"E",phase:"গ্রুপ পর্ব",  t1:"কুরাসাও",         t2:"আইভরিকোস্ট",      v:"ফিলাডেলফিয়া"},
+{id:57,date:"2026-06-26",t:"ভোর ৫টা",    g:"F",phase:"গ্রুপ পর্ব",  t1:"জাপান",           t2:"সুইডেন",           v:"ডালাস"},
+{id:58,date:"2026-06-26",t:"ভোর ৫টা",    g:"F",phase:"গ্রুপ পর্ব",  t1:"তিউনিসিয়া",      t2:"নেদারল্যান্ডস",   v:"কানসাস সিটি"},
+{id:59,date:"2026-06-26",t:"সকাল ৮টা",   g:"D",phase:"গ্রুপ পর্ব",  t1:"যুক্তরাষ্ট্র",   t2:"তুরস্ক",           v:"লস অ্যাঞ্জেলস"},
+{id:60,date:"2026-06-26",t:"সকাল ৮টা",   g:"D",phase:"গ্রুপ পর্ব",  t1:"প্যারাগুয়ে",     t2:"অস্ট্রেলিয়া",    v:"সান ফ্রান্সিসকো"},
+{id:61,date:"2026-06-26",t:"রাত ১টা",    g:"I",phase:"গ্রুপ পর্ব",  t1:"নরওয়ে",          t2:"ফ্রান্স",          v:"বোস্টন"},
+{id:62,date:"2026-06-26",t:"রাত ১টা",    g:"I",phase:"গ্রুপ পর্ব",  t1:"সেনেগাল",         t2:"ইরাক",             v:"টরন্টো"},
+{id:63,date:"2026-06-27",t:"সকাল ৬টা",   g:"H",phase:"গ্রুপ পর্ব",  t1:"উরুগুয়ে",        t2:"স্পেন",            v:"গুয়াদালাহারা"},
+{id:64,date:"2026-06-27",t:"সকাল ৬টা",   g:"H",phase:"গ্রুপ পর্ব",  t1:"কেপ ভার্দে",      t2:"সৌদি আরব",         v:"হিউস্টন"},
+{id:65,date:"2026-06-27",t:"সকাল ৯টা",   g:"G",phase:"গ্রুপ পর্ব",  t1:"নিউজিল্যান্ড",   t2:"বেলজিয়াম",        v:"ভ্যাঙ্কুভার"},
+{id:66,date:"2026-06-27",t:"সকাল ৯টা",   g:"G",phase:"গ্রুপ পর্ব",  t1:"মিশর",            t2:"ইরান",             v:"সিয়াটল"},
+{id:67,date:"2026-06-27",t:"রাত ৩টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"পানামা",          t2:"ইংল্যান্ড",        v:"নিউজার্সি"},
+{id:68,date:"2026-06-27",t:"রাত ৩টা",    g:"L",phase:"গ্রুপ পর্ব",  t1:"ক্রোয়েশিয়া",    t2:"ঘানা",             v:"ফিলাডেলফিয়া"},
+{id:69,date:"2026-06-28",t:"ভোর ৫.৩০",   g:"K",phase:"গ্রুপ পর্ব",  t1:"কলম্বিয়া",       t2:"পর্তুগাল",        v:"মায়ামি"},
+{id:70,date:"2026-06-28",t:"ভোর ৫.৩০",   g:"K",phase:"গ্রুপ পর্ব",  t1:"ডিআর কঙ্গো",      t2:"উজবেকিস্তান",     v:"আটলান্টা"},
+{id:71,date:"2026-06-28",t:"সকাল ৮টা",   g:"J",phase:"গ্রুপ পর্ব",  t1:"জর্ডান",          t2:"আর্জেন্টিনা",     v:"ডালাস"},
+{id:72,date:"2026-06-28",t:"সকাল ৮টা",   g:"J",phase:"গ্রুপ পর্ব",  t1:"আলজেরিয়া",       t2:"অস্ট্রিয়া",       v:"কানসাস সিটি"},
+// ── শেষ ৩২ ──
+{id:73, date:"2026-06-28",t:"রাত ১টা",   g:"R32",phase:"শেষ ৩২",  t1:"এ২",  t2:"বি২",  v:"লস অ্যাঞ্জেলস", matchNo:"ম্যাচ ৭৩"},
+{id:74, date:"2026-06-29",t:"রাত ২.৩০",  g:"R32",phase:"শেষ ৩২",  t1:"ই১",  t2:"এ/বি/সি/ডি/এফ–৩", v:"বোস্টন", matchNo:"ম্যাচ ৭৪"},
+{id:75, date:"2026-06-30",t:"সকাল ৭টা",  g:"R32",phase:"শেষ ৩২",  t1:"এফ১", t2:"সি২",  v:"মন্তেরেই", matchNo:"ম্যাচ ৭৫"},
+{id:76, date:"2026-06-29",t:"রাত ১১টা",  g:"R32",phase:"শেষ ৩২",  t1:"সি১", t2:"এফ২",  v:"হিউস্টন", matchNo:"ম্যাচ ৭৬"},
+{id:77, date:"2026-06-30",t:"রাত ৩টা",   g:"R32",phase:"শেষ ৩২",  t1:"আই১", t2:"সি/ডি/এফ/জি/এইচ–৩", v:"নিউজার্সি", matchNo:"ম্যাচ ৭৭"},
+{id:78, date:"2026-06-30",t:"রাত ১১টা",  g:"R32",phase:"শেষ ৩২",  t1:"ই২",  t2:"আই২",  v:"ডালাস", matchNo:"ম্যাচ ৭৮"},
+{id:79, date:"2026-07-01",t:"সকাল ৭টা",  g:"R32",phase:"শেষ ৩২",  t1:"এ১",  t2:"সি/ই/এফ/এইচ/আই–৩", v:"মেক্সিকো সিটি", matchNo:"ম্যাচ ৭৯"},
+{id:80, date:"2026-07-01",t:"রাত ১০টা",  g:"R32",phase:"শেষ ৩২",  t1:"এল১", t2:"ই/এইচ/আই/জে/কে–৩", v:"আটলান্টা", matchNo:"ম্যাচ ৮০"},
+{id:81, date:"2026-07-02",t:"সকাল ৬টা",  g:"R32",phase:"শেষ ৩২",  t1:"ডি১", t2:"বি/ই/এফ/আই/জে–৩", v:"সান ফ্রান্সিসকো", matchNo:"ম্যাচ ৮১"},
+{id:82, date:"2026-07-01",t:"রাত ২টা",   g:"R32",phase:"শেষ ৩২",  t1:"জি১", t2:"এ/ই/এইচ/আই/জে–৩", v:"সিয়াটল", matchNo:"ম্যাচ ৮২"},
+{id:83, date:"2026-07-03",t:"ভোর ৫টা",   g:"R32",phase:"শেষ ৩২",  t1:"কে২", t2:"এল২",  v:"টরন্টো", matchNo:"ম্যাচ ৮৩"},
+{id:84, date:"2026-07-02",t:"রাত ১টা",   g:"R32",phase:"শেষ ৩২",  t1:"এইচ১",t2:"জে২",  v:"লস অ্যাঞ্জেলস", matchNo:"ম্যাচ ৮৪"},
+{id:85, date:"2026-07-03",t:"সকাল ৯টা",  g:"R32",phase:"শেষ ৩২",  t1:"বি১", t2:"ই/এফ/জি/আই/জে–৩", v:"ভ্যাঙ্কুভার", matchNo:"ম্যাচ ৮৫"},
+{id:86, date:"2026-07-04",t:"ভোর ৪টা",   g:"R32",phase:"শেষ ৩২",  t1:"জে১", t2:"এইচ২", v:"মায়ামি", matchNo:"ম্যাচ ৮৬"},
+{id:87, date:"2026-07-04",t:"সকাল ৭.৩০", g:"R32",phase:"শেষ ৩২",  t1:"কে১", t2:"ডি/ই/আই/জে/এল–৩", v:"কানসাস", matchNo:"ম্যাচ ৮৭"},
+{id:88, date:"2026-07-03",t:"রাত ১২টা",  g:"R32",phase:"শেষ ৩২",  t1:"ডি২", t2:"জি২",  v:"ডালাস", matchNo:"ম্যাচ ৮৮"},
+// ── শেষ ১৬ ──
+{id:89, date:"2026-07-04",t:"রাত ৩টা",   g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৭৪", t2:"জয়ী ৭৭", v:"ফিলাডেলফিয়া", matchNo:"ম্যাচ ৮৯"},
+{id:90, date:"2026-07-04",t:"রাত ১১টা",  g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৭৩", t2:"জয়ী ৭৫", v:"হিউস্টন", matchNo:"ম্যাচ ৯০"},
+{id:91, date:"2026-07-05",t:"রাত ২টা",   g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৭৬", t2:"জয়ী ৭৮", v:"নিউজার্সি", matchNo:"ম্যাচ ৯১"},
+{id:92, date:"2026-07-06",t:"সকাল ৬টা",  g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৭৯", t2:"জয়ী ৮০", v:"মেক্সিকো সিটি", matchNo:"ম্যাচ ৯২"},
+{id:93, date:"2026-07-06",t:"রাত ১টা",   g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৮৩", t2:"জয়ী ৮৪", v:"ডালাস", matchNo:"ম্যাচ ৯৩"},
+{id:94, date:"2026-07-07",t:"সকাল ৬টা",  g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৮১", t2:"জয়ী ৮২", v:"সিয়াটল", matchNo:"ম্যাচ ৯৪"},
+{id:95, date:"2026-07-07",t:"রাত ১০টা",  g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৮৬", t2:"জয়ী ৮৮", v:"আটলান্টা", matchNo:"ম্যাচ ৯৫"},
+{id:96, date:"2026-07-07",t:"রাত ২টা",   g:"R16",phase:"শেষ ১৬", t1:"জয়ী ৮৫", t2:"জয়ী ৮৭", v:"ভ্যাঙ্কুভার", matchNo:"ম্যাচ ৯৬"},
+// ── কোয়ার্টার ফাইনাল ──
+{id:97, date:"2026-07-09",t:"রাত ২টা",   g:"QF",phase:"কোয়ার্টার ফাইনাল", t1:"জয়ী ৮৯", t2:"জয়ী ৯০", v:"বোস্টন", matchNo:"ম্যাচ ৯৭"},
+{id:98, date:"2026-07-10",t:"রাত ১১টা",  g:"QF",phase:"কোয়ার্টার ফাইনাল", t1:"জয়ী ৯৩", t2:"জয়ী ৯৪", v:"লস অ্যাঞ্জেলস", matchNo:"ম্যাচ ৯৮"},
+{id:99, date:"2026-07-11",t:"রাত ৩টা",   g:"QF",phase:"কোয়ার্টার ফাইনাল", t1:"জয়ী ৯১", t2:"জয়ী ৯২", v:"মায়ামি", matchNo:"ম্যাচ ৯৯"},
+{id:100,date:"2026-07-12",t:"সকাল ৭টা",  g:"QF",phase:"কোয়ার্টার ফাইনাল", t1:"জয়ী ৯৫", t2:"জয়ী ৯৬", v:"কানসাস", matchNo:"ম্যাচ ১০০"},
+// ── সেমি ফাইনাল ──
+{id:101,date:"2026-07-14",t:"রাত ১টা",   g:"SF",phase:"সেমি ফাইনাল", t1:"জয়ী ৯৭", t2:"জয়ী ৯৮", v:"ডালাস", matchNo:"ম্যাচ ১০১"},
+{id:102,date:"2026-07-15",t:"রাত ১টা",   g:"SF",phase:"সেমি ফাইনাল", t1:"জয়ী ৯৯", t2:"জয়ী ১০০", v:"আটলান্টা", matchNo:"ম্যাচ ১০২"},
+// ── তৃতীয় স্থান ──
+{id:103,date:"2026-07-18",t:"রাত ৩টা",   g:"3PL",phase:"তৃতীয় স্থান নির্ধারণ", t1:"পরাজিত ১০১", t2:"পরাজিত ১০২", v:"মায়ামি", matchNo:"ম্যাচ ১০৩"},
+// ── ফাইনাল ──
+{id:104,date:"2026-07-19",t:"রাত ১টা",   g:"FIN",phase:"ফাইনাল 🏆", t1:"বিজয়ী ১০১", t2:"বিজয়ী ১০২", v:"নিউজার্সি", matchNo:"ম্যাচ ১০৪"},
+];
+
+function teamHTML(name, isRight) {
+  const info = TEAMS[name];
+  const flagHTML = info
+    ? `<img src="https://flagcdn.com/w40/${info.code}.png"
+           width="36" height="24"
+           style="border-radius:3px;object-fit:cover;flex-shrink:0;display:block;box-shadow:0 1px 4px rgba(0,0,0,0.5)"
+           alt="${info.en}"
+           onerror="this.style.display='none'">`
+    : `<span style="font-size:1.2rem;flex-shrink:0">🏳️</span>`;
+  const enName = info ? `<div class="team-name-en">${info.en}</div>` : '';
+  if (isRight) {
+    return `<div class="team right">
+      ${flagHTML}
+      <div><div class="team-name">${name}</div>${enName}</div>
+    </div>`;
+  }
+  return `<div class="team">
+    ${flagHTML}
+    <div><div class="team-name">${name}</div>${enName}</div>
+  </div>`;
+}
+
+function renderFixtures(list) {
+  const cont = document.getElementById('matchesContainer');
+  const noRes = document.getElementById('noResults');
+  document.getElementById('shownCount').textContent = list.length;
+  if (!list.length) { cont.innerHTML=''; noRes.classList.remove('hidden'); return; }
+  noRes.classList.add('hidden');
+
+  const byDate = {};
+  list.forEach(f => { if(!byDate[f.date]) byDate[f.date]=[]; byDate[f.date].push(f); });
+
+  let html = '';
+  Object.keys(byDate).sort().forEach(date => {
+    const ms = byDate[date];
+    html += `<div class="day-group">
+      <div class="day-header">
+        <span class="day-name">${fmtDate(date)}</span>
+        <span class="day-count">${ms.length}টি ম্যাচ</span>
+      </div>
+      <div class="matches-grid">`;
+    ms.forEach(f => {
+      const grpLabel = f.matchNo
+        ? `${f.matchNo} · ${f.phase}`
+        : `গ্রুপ ${f.g} · ${f.phase}`;
+      html += `<div class="match-card">
+        ${teamHTML(f.t1, false)}
+        <div class="match-center">
+          <div class="vs-badge">VS</div>
+          <div class="match-time">⏰ ${f.t}</div>
+          <div class="match-group">${grpLabel}</div>
+        </div>
+        ${teamHTML(f.t2, true)}
+        <div class="match-meta">
+          <span class="meta-badge">🏟️ ${f.v}${VENUE_COUNTRY[f.v] ? ', <span style="color:var(--gold-light)">'+VENUE_COUNTRY[f.v]+'</span>' : ''}</span>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  cont.innerHTML = html;
+}
+
+function populateTeamFilter() {
+  const sel = document.getElementById('filterTeam');
+  const teams = new Set();
+  F.forEach(f => { if(TEAMS[f.t1]) teams.add(f.t1); if(TEAMS[f.t2]) teams.add(f.t2); });
+  [...teams].sort().forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    sel.appendChild(o);
+  });
+}
+
+function applyFilters() {
+  const grp = document.getElementById('filterGroup').value;
+  const team = document.getElementById('filterTeam').value;
+  const filtered = F.filter(f => {
+    if(grp && f.g !== grp) return false;
+    if(team && f.t1 !== team && f.t2 !== team) return false;
+    return true;
+  });
+  renderFixtures(filtered);
+}
+
+function resetFilters() {
+  document.getElementById('filterGroup').value = '';
+  document.getElementById('filterTeam').value = '';
+  renderFixtures(F);
+}
+
+function renderGroups() {
+  const cont = document.getElementById('groupsContainer');
+  let html = '';
+  Object.entries(GROUPS).forEach(([g, teams]) => {
+    html += `<div class="group-card"><div class="group-title">গ্রুপ ${g}</div><div>`;
+    teams.forEach(t => {
+      const info = TEAMS[t];
+      const flag = info
+        ? `<img src="https://flagcdn.com/w40/${info.code}.png" width="28" height="19"
+               style="border-radius:2px;object-fit:cover" alt="${info.en}"
+               onerror="this.style.display='none'">`
+        : '🏳️';
+      html += `<div class="group-team-row">${flag}<span>${t}</span></div>`;
+    });
+    html += `</div></div>`;
+  });
+  cont.innerHTML = html;
+}
+
+function showTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['fixtures','groups'].forEach(t => document.getElementById('tab-'+t).classList.add('hidden'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+}
+
+populateTeamFilter();
+renderFixtures(F);
+renderGroups();
+document.getElementById('totalCount').textContent = F.length;
+document.getElementById('shownCount').textContent = F.length;
+</script>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-source">
+      <span class="footer-ball">⚽</span>
+      Data Source: <span>FIFA</span> &amp; <span>Newspaper</span>
+      <span class="footer-ball">⚽</span>
+    </div>
+    <div class="footer-credit">
+      It's <a href="https://www.facebook.com/abmannan.moni/" target="_blank" rel="noopener">Ab Mannan Moni</a>'s Creation
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
