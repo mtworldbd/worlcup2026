@@ -241,6 +241,64 @@
   @media(max-width:380px){
     .groups-container{grid-template-columns:1fr}
   }
+  /* LIVE BAR */
+  .live-bar {
+    background: linear-gradient(90deg, #7b0000 0%, #b10000 40%, #7b0000 100%);
+    background-size: 200% 100%;
+    animation: livePulse 3s ease-in-out infinite;
+    border-bottom: 1px solid rgba(255,80,80,0.3);
+    padding: 0;
+  }
+  @keyframes livePulse {
+    0%,100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  .live-bar-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .live-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #ff4444;
+    box-shadow: 0 0 8px #ff4444;
+    animation: blink 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .live-badge-text {
+    background: #ff2222;
+    color: #fff;
+    font-size: 0.7rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px;
+    letter-spacing: 1px; font-family: sans-serif;
+    flex-shrink: 0;
+  }
+  .live-bar-msg {
+    font-size: 0.88rem; color: #ffe0e0; font-weight: 600;
+    flex: 1; text-align: center;
+  }
+  .live-bar-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 0.82rem; font-weight: 700;
+    padding: 5px 14px; border-radius: 20px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    white-space: nowrap; flex-shrink: 0;
+    font-family: sans-serif;
+  }
+  .live-bar-link:hover {
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.04);
+  }
+  @media(max-width:480px){
+    .live-bar-msg{ font-size:0.78rem; }
+  }
+
   /* FOOTER */
   footer {
     margin-top: 40px;
@@ -287,6 +345,18 @@
     <div class="header-badge">🇧🇩 BST</div>
   </div>
 </header>
+
+<!-- LIVE BAR -->
+<div class="live-bar">
+  <div class="live-bar-inner">
+    <div class="live-dot"></div>
+    <span class="live-badge-text">LIVE</span>
+    <span class="live-bar-msg">⚽ বিশ্বকাপের ম্যাচ সরাসরি দেখুন এখান থেকে!</span>
+    <a class="live-bar-link" href="https://livefy1.blogspot.com/" target="_blank" rel="noopener">
+      ▶ এখনই দেখুন
+    </a>
+  </div>
+</div>
 
 <div class="filters-section">
   <div class="filters-inner">
